@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Menu, X, ShoppingCart, Heart, User, Search } from "lucide-react";
 import alif_logo from "../assets/alif_logo.png";
+import { CartContext } from "../context/CartContext"; // Importing CartContext
 import { Input, Space } from "antd";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false); // State to manage cart modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { cartItems, totalPrice, clearCart, increaseQuantity, decreaseQuantity } = useContext(CartContext); // Accessing cart state and update functions
 
   const categories = [
     "Smartfonlar va gadjetlar",
@@ -63,7 +67,9 @@ const Header = () => {
 
               <div className="hidden lg:flex items-center gap-4">
                 <div className="flex items-center gap-4 text-gray-600">
-                  <ShoppingCart className="cursor-pointer hover:text-[#ED1E26]" />
+                  <button onClick={() => setIsCartOpen(!isCartOpen)}>
+                    <ShoppingCart className="cursor-pointer hover:text-[#ED1E26]" />
+                  </button>
                   <Heart className="cursor-pointer hover:text-[#ED1E26]" />
                   <User className="cursor-pointer hover:text-[#ED1E26]" />
                   <div className="ml-2 text-sm font-medium">RU / UZ</div>
@@ -117,6 +123,64 @@ const Header = () => {
         </div>
       </div>
 
+      {/* Full-Screen Cart Modal */}
+      {isCartOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+          <div className="bg-white w-full h-full max-h-[90vh] overflow-y-auto rounded-lg p-6 relative">
+            <button
+              className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-xl font-bold"
+              onClick={() => setIsCartOpen(false)}
+            >
+              &times;
+            </button>
+            <h2 className="text-xl font-semibold mb-4 text-center">
+              Savatchangiz
+            </h2>
+            {cartItems.length === 0 ? (
+              <p className="text-center text-gray-500">Savatcha bo‘sh</p>
+            ) : (
+              <>
+                <ul className="max-h-60 overflow-y-auto space-y-2">
+                  {cartItems.map((item) => (
+                    <li key={item.id} className="flex justify-between items-center">
+                      <div className="flex items-center gap-4">
+                        <div className="text-sm">{item.title}</div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => decreaseQuantity(item.id)}
+                            className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
+                          >
+                            -
+                          </button>
+                          <span className="text-sm">{item.quantity}</span>
+                          <button
+                            onClick={() => increaseQuantity(item.id)}
+                            className="bg-gray-200 px-2 py-1 rounded hover:bg-gray-300"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</div>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4 font-bold text-right">
+                  Umumiy: ${totalPrice.toFixed(2)}
+                </div>
+                <button
+                  onClick={clearCart}
+                  className="mt-2 w-full bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                >
+                  Savatchani tozalash
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Catalog Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
           <div className="bg-white w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-lg p-6 relative">
