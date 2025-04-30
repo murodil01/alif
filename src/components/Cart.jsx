@@ -42,7 +42,6 @@ const Cart = () => {
         </div>
       ))}
 
-      {/* Clear button */}
       <div className="text-right mt-6">
         <button
           onClick={clearCart}
@@ -52,7 +51,6 @@ const Cart = () => {
         </button>
       </div>
 
-      {/* Total price */}
       <div className="text-right font-bold text-xl mt-4">
         Umumiy narx: ${totalPrice.toFixed(2)}
       </div>

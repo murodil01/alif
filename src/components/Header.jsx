@@ -1,15 +1,22 @@
 import { useState, useContext } from "react";
 import { Menu, X, ShoppingCart, Heart, User, Search } from "lucide-react";
 import alif_logo from "../assets/alif_logo.png";
-import { CartContext } from "../context/CartContext"; // Importing CartContext
+import { CartContext } from "../context/CartContext";
 import { Input, Space } from "antd";
+import Slider from "react-slick";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false); // State to manage cart modal visibility
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { cartItems, totalPrice, clearCart, increaseQuantity, decreaseQuantity } = useContext(CartContext); // Accessing cart state and update functions
+  const {
+    cartItems,
+    totalPrice,
+    clearCart,
+    increaseQuantity,
+    decreaseQuantity,
+  } = useContext(CartContext);
 
   const categories = [
     "Smartfonlar va gadjetlar",
@@ -34,6 +41,16 @@ const Header = () => {
     "Telefon aksessuarlari",
     "Fotoapparatlar",
   ];
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
 
   return (
     <div>
@@ -123,7 +140,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Full-Screen Cart Modal */}
       {isCartOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
           <div className="bg-white w-full h-full max-h-[90vh] overflow-y-auto rounded-lg p-6 relative">
@@ -142,7 +158,10 @@ const Header = () => {
               <>
                 <ul className="max-h-60 overflow-y-auto space-y-2">
                   {cartItems.map((item) => (
-                    <li key={item.id} className="flex justify-between items-center">
+                    <li
+                      key={item.id}
+                      className="flex justify-between items-center"
+                    >
                       <div className="flex items-center gap-4">
                         <div className="text-sm">{item.title}</div>
                         <div className="flex gap-2">
@@ -161,7 +180,9 @@ const Header = () => {
                           </button>
                         </div>
                       </div>
-                      <div className="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</div>
+                      <div className="text-sm font-medium">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -180,7 +201,6 @@ const Header = () => {
         </div>
       )}
 
-      {/* Catalog Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
           <div className="bg-white w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-lg p-6 relative">
@@ -206,6 +226,39 @@ const Header = () => {
           </div>
         </div>
       )}
+
+      <div className="max-w-7xl mx-auto my-[30px]">
+        <Slider {...sliderSettings}>
+          <div>
+            <img
+              className="rounded w-full max-h-[572px]"
+              src="https://s3.fortifai.uz/shop/catalog/carousel/216/1745324768-byd_1600╤Е491_ru.png"
+              alt=""
+            />
+          </div>
+          <div>
+            <img
+              className="rounded w-full max-h-[572px]"
+              src="https://s3.fortifai.uz/shop/catalog/carousel/295/1746018044-Kondicioner 1600x491 RU.png"
+              alt=""
+            />
+          </div>
+          <div>
+            <img
+              className="rounded w-full max-h-[572px]"
+              src="https://s3.fortifai.uz/shop/catalog/carousel/215/1716885789-main_1600x491_ru.png"
+              alt=""
+            />
+          </div>
+          <div>
+            <img
+              className="rounded w-full max-h-[572px]"
+              src="https://s3.fortifai.uz/shop/catalog/events/event-a7f29ba5-5642-4907-a868-c79cea55318f/1730377497-/bosch_1600х244_RU.jpg"
+              alt=""
+            />
+          </div>
+        </Slider>
+      </div>
     </div>
   );
 };
