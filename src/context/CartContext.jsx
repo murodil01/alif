@@ -35,6 +35,10 @@ export const CartProvider = ({ children }) => {
     ));
   };
 
+  const clearCart = () => {
+    setCartItems([]); // savatchani bo‘shatadi
+  };
+
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
@@ -45,6 +49,7 @@ export const CartProvider = ({ children }) => {
         increaseQuantity,
         decreaseQuantity,
         totalPrice,
+        clearCart, 
       }}
     >
       {children}
